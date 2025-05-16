@@ -146,6 +146,14 @@ void FarmvilleApp::onShutdown() {
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
+std::string getTexture(std::string str){
+    auto slash = str.find_last_of('/');
+    // Find position of last '.'
+    auto dot   = str.find_last_of('.');
+
+    // Extract the substring in between
+    return str.substr(slash + 1, dot - (slash + 1));
+}
 void FarmvilleApp::update(float timestep) {
     Size  size  = getDisplaySize();
     //CULog("hi");
@@ -161,7 +169,13 @@ void FarmvilleApp::update(float timestep) {
             // use key (and optionally value)
             if(_elements[layer].count(key) > 0) {
                 _elements[layer][key]->setPosition(value.x, value.y);
-                _elements[layer][key]->setTexture(_assets->get<Texture>(value.texture));
+
+                //std::cout << getTexture(_elements[layer][key]->getTexture()->getName()) << std::endl;
+
+                if(getTexture(_elements[layer][key]->getTexture()->getName()) != value.texture) {
+                    _elements[layer][key]->setTexture(_assets->get<Texture>(value.texture));
+                }
+                
             } else {
                 // create a new element
                 std::shared_ptr<scene2::PolygonNode> element = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(value.texture));
