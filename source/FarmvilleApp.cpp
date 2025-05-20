@@ -1,41 +1,10 @@
-//
-//  HelloApp.cpp
-//  Cornell University Game Library (CUGL)
-//
-//  This is the implementation file for the custom application. This is the
-//  definition of your root (and in this case only) class.
-//
-//  CUGL zlib License:
-//      This software is provided 'as-is', without any express or implied
-//      warranty.  In no event will the authors be held liable for any damages
-//      arising from the use of this software.
-//
-//      Permission is granted to anyone to use this software for any purpose,
-//      including commercial applications, and to alter it and redistribute it
-//      freely, subject to the following restrictions:
-//
-//      1. The origin of this software must not be misrepresented; you must not
-//      claim that you wrote the original software. If you use this software
-//      in a product, an acknowledgment in the product documentation would be
-//      appreciated but is not required.
-//
-//      2. Altered source versions must be plainly marked as such, and must not
-//      be misrepresented as being the original software.
-//
-//      3. This notice may not be removed or altered from any source distribution.
-//
-//  Author: Walker White
-//  Version: 1/8/17
-//
-// Include the class header, which includes all of the CUGL classes
+
 #include "FarmvilleApp.h"
-// Add support for simple random number generation
 #include <cstdlib>
 #include <ctime>
 #include "displayobject.hpp"
 #include "FarmLogic.h"
 
-// This keeps us from having to write cugl:: all the time
 using namespace cugl;
 using namespace cugl::graphics;
 using namespace cugl::scene2;
@@ -64,6 +33,8 @@ void FarmvilleApp::onStartup() {
     setClearColor(Color4(0,229,0,255));
     _scene->setSpriteBatch(_batch);
     
+    _root = OrderedNode::allocWithOrder(OrderedNode::Order::ASCEND);
+    _scene->addChild(_root);
     // Create an asset manager to load all assets
     _assets = AssetManager::alloc();
     
@@ -104,6 +75,7 @@ void FarmvilleApp::onStartup() {
     CULog("%s",path.c_str());
 
 
+    //Start farm simulation
     FarmLogic::start();
 }
 
@@ -135,6 +107,15 @@ void FarmvilleApp::onShutdown() {
     Application::onShutdown();
 }
 
+std::string getTexture(std::string str){
+    auto slash = str.find_last_of('/');
+    // Find position of last '.'
+    auto dot   = str.find_last_of('.');
+    // Extract the substring in between
+    return str.substr(slash + 1, dot - (slash + 1));
+}
+
+
 /**
  * The method called to update the application data.
  *
@@ -146,51 +127,34 @@ void FarmvilleApp::onShutdown() {
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-std::string getTexture(std::string str){
-    auto slash = str.find_last_of('/');
-    // Find position of last '.'
-    auto dot   = str.find_last_of('.');
-
-    // Extract the substring in between
-    return str.substr(slash + 1, dot - (slash + 1));
-}
 void FarmvilleApp::update(float timestep) {
     Size  size  = getDisplaySize();
-    //CULog("hi");
     auto current = std::atomic_load_explicit(
         &DisplayObject::buffedFarmPointer,
         std::memory_order_acquire);
-  
-    //std::cout << "Current farm Layer 1 size: " << (*current)[1].size() << std::endl;
-    
-    for(int layer = 0; layer < DisplayObject::NLAYERS; layer++) {
-        auto map = (*current)[layer];
+        auto map = (*current);
         for (const auto & [key, value] : map) {
-            // use key (and optionally value)
-            if(_elements[layer].count(key) > 0) {
-                _elements[layer][key]->setPosition(value.x, value.y);
+            if(_elements.count(key) > 0) {
+                _elements[key]->setPosition(value.x, value.y);
 
-                //std::cout << getTexture(_elements[layer][key]->getTexture()->getName()) << std::endl;
-
-                if(getTexture(_elements[layer][key]->getTexture()->getName()) != value.texture) {
-                    _elements[layer][key]->setTexture(_assets->get<Texture>(value.texture));
+                if(getTexture(_elements[key]->getTexture()->getName()) != value.texture) {
+                    _elements[key]->setTexture(_assets->get<Texture>(value.texture));
                 }
-                
+            
             } else {
                 // create a new element
                 std::shared_ptr<scene2::PolygonNode> element = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(value.texture));
                 element->setPosition(value.x, value.y);
+                element->setPriority(value.layer);
                 element->setScale(value.width/element->getWidth(), value.height/element->getHeight()); 
-                
                 element->setAnchor(Vec2::ANCHOR_CENTER);
-                std::cout << "polygon " << element->getPolygon().toString() << std::endl;
-                _scene->addChild(element);
-                _elements[layer][key] = element;
+                _root->addChild(element);
+                _elements[key] = element;
             }
         }
     }
 
-}
+
 
 /**
  * The method called to draw the application to the screen.

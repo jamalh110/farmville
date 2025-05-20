@@ -6,12 +6,16 @@
 #include <ctime>
 
 void FarmLogic::run() {
+    BakeryStats stats;
+
     std::srand(std::time(0));
-    DisplayObject chicken("chicken", 40, 40, 1, 0);
+    DisplayObject chicken("chicken", 80, 80, 1, 0);
     DisplayObject chicken2("chicken", 40, 40, 1, 1);
-    chicken.setPos(200, 200);
-    chicken2.setPos(400, 400);
-    DisplayObject::redisplay();
+    chicken.setPos(400, 300);
+    chicken2.setPos(400, 300);
+    chicken.updateFarm();
+    chicken2.updateFarm();
+    DisplayObject::redisplay(stats);
     
     int frame = 0;
     int randomNumberX = (std::rand() % 11) - 5;
@@ -26,9 +30,10 @@ void FarmLogic::run() {
         // move our local copies:
         chicken.setPos(chicken.x + randomNumberX, chicken.y  + randomNumberY);
         chicken2.setPos(chicken2.x + randomNumberX, chicken2.y + randomNumberY);
-        DisplayObject::redisplay();
+        chicken.updateFarm();
+        chicken2.updateFarm();
+        //DisplayObject::redisplay(stats);
         // sleep for 1 second
-        //std::this_thread::sleep_for(std::chrono::milliseconds(100));
         usleep(1000000);
     }
 }
