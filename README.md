@@ -24,7 +24,10 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 - Each object has an `updateFarm` and `erase` method. `updateFarm` updates (and if needed, inserts) its value in the shared farm state object, and `erase` removes the object from the shared farm state object. When these are called, it will be reflected on screen upon the following `redisplay()` call
 
 ## How to run:
-- 
+- Python dependencies: PyYAML, Pillow, shortuuid
+- `./compile.sh` to compile
+- `./run.sh` to run
+- After your first build, you can use `./compile.sh skip-cugl` to speed up compilation
 - If this is not working on your machine, we have steps below detailing how to run this in a VirtualBox Ubuntu VM
 
 ## The scenario:
