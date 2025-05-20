@@ -19,7 +19,7 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 - The Farm is 800 pixels wide and 600 pixels tall. The bottom left is (0,0), and the top right is (800,600)
 - Each object has an ID field. This value should be unique for all objects
 - Each object has a layer field. Objects with a higher layer value will be rendered above objects with lower layer values. We recommend layer=0 for stationary objects (e.g. nests, barns, bakery), layer=1 for items (e.g. eggs, flour, butter), and layer=2 for moving objects (e.g. chicken, cow, farmer)
-- Objects in the same layer should not collide. We will be testing for this
+- Objects in the same layer should not collide. We will be testing for this in part 2
 - Each object has the `setTexture` and `setPos` methods to change its texture or position.
 - Each object has an `updateFarm` and `erase` method. `updateFarm` updates (and if needed, inserts) its value in the shared farm state object, and `erase` removes the object from the shared farm state object. When these are called, it will be reflected on screen upon the following `redisplay()` call
 
@@ -31,17 +31,17 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 - If this is not working on your machine, we have steps below detailing how to run this in a VirtualBox Ubuntu VM
 
 ## The scenario:
-- We have a set of barns that produce eggs, flour, butter and sugar. The screen definitely has room for two barns, so we will have one that produces butter and eggs, and a second farm that produces flour and sugar. On a farm there will be a few “prebuilt” nests, initially empty. You definitely will want at least two nests but more may be useful.
-- The farm can produce “unlimited” amounts of butter, and the flour/sugar farm can make unlimited flour and sugar, but eggs need to match what the chickens lay.
+- We have a set of barns that produce eggs, flour, butter and sugar. The screen definitely has room for two barns, so we will have one that produces butter and eggs, and a second barn that produces flour and sugar. The farm will have a few nests, initially empty. You definitely will want at least two nests but more may be useful.
+- The butter/eggs barn can produce unlimited amounts of butter, and the flour/sugar barn can make unlimited flour and sugar. But, the butter/eggs barn's egg output will need to match what the chickens lay.
 - You should have a non-trivial amount of animals visible: at least three chickens and two cows. Chickens basically walk from nest to nest, wait for space, and then lay one or more eggs in the nest. A nest with 3 eggs is full. You will want a pretty rapid supply of eggs. Even so, the chickens should sometimes move around – they can’t just sit on a nest laying eggs continuously. At a minimum, your chickens must change to a different nest at least once every 3 eggs laid, and they do this by walking, not teleportation.
 - From time to time the farmer comes and collects the eggs. This empties the nests.
 - You can animate the cows, or just have them standing around. The farmer can milk the cow now and then, but you would need to add animations in CUGL for that. We are not requiring that you show the farmer milking the cow, but the best looking simulated farms will receive extra credit (detailed below)
-- There should be two trucks. One of them drives back and forth to the butter and egg barn, and the other drives to the flour and sugar barn. On arrival, each loads up with a full load of produce, then takes it to the bakery for storage. The truck unloads into the bakery, and then can go fetch more produce. A truck never needs to “wait” for butter, flour or sugar, but may need to wait for eggs, if it arrives when the farm doesn’t any available
-- A full load of produce “fills a truck”. This will be three of each: three eggs, three boxes of butter, three bags of flour, three bags of sugar. Notice that the eggs are still a limiting factor because in our setup since we can see them being laid. If the farm has extra crates of eggs, the truck can’t take them all in one load: it would carry three, then come back for three more, etc.
-- Again, keep in mind that moving is a step by step process. A truck doesn’t teleport from the factory to the farm: it has to follow some form of path (road) from factory to farm and back. If you like, you can add a background image for the roads you will use
+- There should be two trucks. One of them drives back and forth to the butter and egg barn, and the other drives to the flour and sugar barn. On arrival, each loads up with a full load of produce, then takes it to the bakery for storage. The truck unloads into the bakery, and then can go fetch more produce. A truck never needs to “wait” for butter, flour or sugar, but may need to wait for eggs, if it arrives when the barn doesn’t any available
+- A full load of produce “fills a truck”. This will be three of each: three eggs, three boxes of butter, three bags of flour, three bags of sugar. Notice that the eggs are still a limiting factor because in our setup since we can see them being laid. If the barn has extra eggs, the truck can’t take them all in one load: it would carry three, then come back for three more, etc.
+- Again, keep in mind that moving is a step by step process. A truck doesn’t teleport from the barn to the bakery: it has to follow some form of path (road) from barn to bakery and back. If you like, you can add a background image for the roads you will use
 - Now, let’s focus on the bakery. The bakery's storage has a capacity of 6 of each item, and when it is full for any given item, the truck must wait for space to unload
-- There is an oven, which requires two of each item to run. You can bake a batch of cakes only if the oven is free (no prior batch is baking) and if there is room for the batch in the "stock" of the pastry shop. This stock area has room for 6 cakes, and each baked batch is 3 cakes.
-- Children come to buy the cakes. They can buy as few as one cake or as many as six, randomly. Only one child can enter the pastry shop at a time. There should be five children, and all of them stand around waiting to buy a cake, then walk away (to take to be eaten), and then return for another cake. We should be able to see all five children at all times. A child will wait (in the shop) if he or she is trying to buy k cakes, but there are currently less than k in stock. When more are baked, that child continues to buy them until it reaches the target number. So for example, a child who wants 5 cakes and enters when there is just 1 left would need to wait for two more batches (3 cakes each!) to be ready. Then there would be 2 remaining when that child leaves the store (1 + 6 – 5). As the number of cakes changes, make sure the stock shows an accurate number of cakes.
+- There is an oven, which requires two of each item to bake a batch of cakes. You can bake a batch of cakes only if the oven is free (no prior batch is baking) and if there is room for the batch in the "stock" of the bakery. This stock area has room for 6 cakes, and each baked batch is 3 cakes.
+- Children come to buy the cakes. They can buy as few as one cake or as many as six, randomly. Only one child can enter the shop at a time. There should be five children, and all of them stand around waiting to buy a cake, then walk away (to take to be eaten), and then return for another cake. We should be able to see all five children at all times. A child will wait (in the shop) if he or she is trying to buy k cakes, but there are currently less than k in stock. When more are baked, that child continues to buy them until it reaches the target number. So for example, a child who wants 5 cakes and enters when there is just 1 left would need to wait for two more batches (3 cakes each!) to be ready. Then there would be 2 remaining when that child leaves the store (1 + 6 – 5). As the number of cakes changes, make sure the stock shows an accurate number of cakes.
 - In addition to displaying the farm, we also track how many eggs have been laid and how many have been used up, how much butter, etc. The statistics are shown in the console. The system just runs endlessly, but shouldn’t ever “lose” products!
 
 
@@ -49,7 +49,7 @@ Notice the various synchronization conditions!
 - We aren’t allowing children or chickens or trucks or other objects at the same layer to occupy the same space at the same time. You’ll need to enforce this. If your trucks follow roads that cross, they will need to be careful at the intersections or a crash could occur!
 - A nest isn’t allowed to overflow: once it has 3 eggs in it, that nest is full until the farmer empties it. If a nest ever has 4 eggs, that would be a synchronization error.
 - A truck must be emptied before it can do its next trip to the farm, but emptying it requires space in the bakery's storage for all the products it carried. It must also be full when it leaves the farm.
-- The oven can't bake until it can take the required ingredients from storage and until there is space in the store's stock
+- The oven can't bake until it can take the required ingredients from storage and until there is space in the bakery's stock
 - There may be additional requirements that we haven’t mentioned, for example to avoid having chickens or trucks crash into each other. (And you are welcome to extend the basic setup, but if you do, it would probably add more synchronization requirements).
 - There are also C++ language synchronization requirements. Look for variables that need to be updated or read in critical sections and be sure to protect them properly!
 
@@ -58,7 +58,7 @@ Notice the various synchronization conditions!
 - Our existing program has a displayable object class and creates some basic objects, which it displays in a pretty random way so that you can see them. Then it loops animating one or two things, again in a totally random way to demonstrate the capability. 
 - Your task is create one thread per moving object, which would loop and show the object as it moves around. Use the monitor style of synchronization, and use monitor condition variables to wait for specific things.
 - Additionally, do the redisplay action in a separate thread that loops: it should redisplay, sleep for a while, then repeat. Aim for at least 10 frames per second (100ms sleep time)
-- PLEASE NOTE: Our main program (as given to you) uses usleep. This is NOT the way for threads to pause – it pauses the whole application. Your threads will be using the condition variable wait_until operation, which lets you wait for a timed delay. You should read about wait_until, and eliminate usleep completely from your new main process. 
+- PLEASE NOTE: Our example program (as given to you) uses usleep. This is NOT the way for threads to pause – it pauses the whole application. Your threads will be using the condition variable wait_until operation, which lets you wait for a timed delay. You should read about wait_until, and eliminate usleep completely from your new main process. 
 
 
 ## Part 1: Due on X 
@@ -72,7 +72,7 @@ will be buggy if you do not implement this one form of mutual exclusion.
 
 The simulation should run until ^C or until the window is closed
 
-For part 1 we will look at your logic for ensuring that your `redisplay()`, `updateFarm()`, and `erase()` do not both enter the critical section concurrently, do not deadlock, and do not livelock. This is the only thing we will evaluate on part 1.
+For part 1 we will look at your logic for ensuring that your `redisplay()`, `updateFarm()`, and `erase()` do not enter the critical section concurrently, do not deadlock, and do not livelock. This is the only thing we will evaluate on part 1.
 
 ## Part 2: Due on X
 For this part, add to your part 1 all the missing logic for all the synchronization required to fully implement the application.
