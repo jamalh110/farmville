@@ -28,10 +28,11 @@ void DisplayObject::updateFarm()
 }
 void DisplayObject::erase()
 {
-	auto it = theFarm.find(id);
-	if (it != theFarm.end()) {
-		theFarm.erase(it);
-	}
+	// auto it = theFarm.find(id);
+	// if (it != theFarm.end()) {
+	// 	theFarm.erase(it);
+	// }
+	theFarm.erase(id);
 }
 void DisplayObject::setPos(int x, int y)
 {
@@ -50,5 +51,5 @@ void DisplayObject::redisplay(BakeryStats& _stats)
 		&buffedFarmPointer,
 		snapshot,
 		std::memory_order_release);
-	stats = _stats; 
+	_stats.print();
 }

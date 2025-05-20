@@ -16,17 +16,33 @@ struct BakeryStats {
     int flour_used      = 0;
     int cakes_produced  = 0;
     int cakes_sold      = 0;
+
+	void print() const {
+        std::cout
+          << "\n\n\n\n\n\nBakeryStats:\n"
+          << "  eggs_laid:        " << eggs_laid       << "\n"
+          << "  eggs_used:        " << eggs_used       << "\n"
+          << "  butter_produced:  " << butter_produced << "\n"
+          << "  butter_used:      " << butter_used     << "\n"
+          << "  sugar_produced:   " << sugar_produced  << "\n"
+          << "  sugar_used:       " << sugar_used      << "\n"
+          << "  flour_produced:   " << flour_produced  << "\n"
+          << "  flour_used:       " << flour_used      << "\n"
+          << "  cakes_produced:   " << cakes_produced  << "\n"
+          << "  cakes_sold:       " << cakes_sold      << "\n";
+    }
 };
 
 class DisplayObject {
 public:
+
+	//DO NOT CHANGE THE TYPES OR NAMES OF THESE VARIABLES
 	int  width;
 	int  height;
 	int  layer;
 	int  x;
 	int  y;
 	int  id;
-	bool isUpdating = false;
 	std::string texture;
 
 	void setPos(int, int);
@@ -39,14 +55,17 @@ public:
 
 	static void redisplay(BakeryStats& stats);
 
+	//DO NOT CHANGE WIDTH AND HEIGHT
 	static const int WIDTH = 800;
 	static const int HEIGHT = 600;
-	static const int NLAYERS = 2;
 
-	//TODO: should store pointers or copies in theFarm?
 	static std::unordered_map<int, DisplayObject> theFarm;
-	static std::shared_ptr<std::unordered_map<int, DisplayObject>> buffedFarmPointer;
 	static BakeryStats stats;
+
+
+	//DO NOT CHANGE THE TYPE OF THIS VARIABLE
+	static std::shared_ptr<std::unordered_map<int, DisplayObject>> buffedFarmPointer;
+	
 private:
 	
 };

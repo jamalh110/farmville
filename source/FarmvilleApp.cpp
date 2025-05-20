@@ -24,58 +24,58 @@ using namespace cugl::scene2;
  * very last line.  This ensures that the state will transition to FOREGROUND,
  * causing the application to run.
  */
-void FarmvilleApp::onStartup() {
+void FarmvilleApp::onStartup()
+{
     // Create a scene graph the same size as the window
-    _scene = Scene2::allocWithHint(Size(GAME_WIDTH,0));
-    
+    _scene = Scene2::allocWithHint(Size(GAME_WIDTH, 0));
+
     // Create a sprite batch (and background color) to render the scene
     _batch = SpriteBatch::alloc();
-    setClearColor(Color4(0,229,0,255));
+    setClearColor(Color4(0, 229, 0, 255));
     _scene->setSpriteBatch(_batch);
-    
+
     _root = OrderedNode::allocWithOrder(OrderedNode::Order::ASCEND);
     _scene->addChild(_root);
     // Create an asset manager to load all assets
     _assets = AssetManager::alloc();
-    
+
     // You have to attach the individual loaders for each asset type
     _assets->attach<Texture>(TextureLoader::alloc()->getHook());
     _assets->attach<Font>(FontLoader::alloc()->getHook());
-    
+
     // This reads the given JSON file and uses it to load all other assets
     _assets->loadDirectory("json/assets.json");
 
     // Activate mouse or touch screen input as appropriate
     // We have to do this BEFORE the scene, because the scene has a button
-#if defined (CU_TOUCH_SCREEN)
+#if defined(CU_TOUCH_SCREEN)
     Input::activate<Touchscreen>();
 #else
     Input::activate<Mouse>();
 #endif
-    
+
     // Build the scene from these assets
     buildScene();
     Application::onStartup();
-    
+
     // Report the safe area
     Rect bounds = Display::get()->getSafeBounds();
-    CULog("Safe Area %sx%s",bounds.origin.toString().c_str(),
-                            bounds.size.toString().c_str());
+    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
+          bounds.size.toString().c_str());
 
     bounds = getSafeBounds();
-    CULog("Safe Area %sx%s",bounds.origin.toString().c_str(),
-                            bounds.size.toString().c_str());
+    CULog("Safe Area %sx%s", bounds.origin.toString().c_str(),
+          bounds.size.toString().c_str());
 
     bounds = getDisplayBounds();
-    CULog("Full Area %sx%s",bounds.origin.toString().c_str(),
-                            bounds.size.toString().c_str());
+    CULog("Full Area %sx%s", bounds.origin.toString().c_str(),
+          bounds.size.toString().c_str());
 
     std::string root = cugl::Application::get()->getSaveDirectory();
-    std::string path = root+"save.json";
-    CULog("%s",path.c_str());
+    std::string path = root + "save.json";
+    CULog("%s", path.c_str());
 
-
-    //Start farm simulation
+    // Start farm simulation
     FarmLogic::start();
 }
 
@@ -90,14 +90,15 @@ void FarmvilleApp::onStartup() {
  * very last line.  This ensures that the state will transition to NONE,
  * causing the application to be deleted.
  */
-void FarmvilleApp::onShutdown() {
+void FarmvilleApp::onShutdown()
+{
     // Delete all smart pointers
 
-    //TODO: delete all elements
+    // TODO: delete all elements
     _scene = nullptr;
     _batch = nullptr;
     _assets = nullptr;
-    
+
     // Deativate input
 #if defined CU_TOUCH_SCREEN
     Input::deactivate<Touchscreen>();
@@ -107,14 +108,14 @@ void FarmvilleApp::onShutdown() {
     Application::onShutdown();
 }
 
-std::string getTexture(std::string str){
+std::string getTexture(std::string str)
+{
     auto slash = str.find_last_of('/');
     // Find position of last '.'
-    auto dot   = str.find_last_of('.');
+    auto dot = str.find_last_of('.');
     // Extract the substring in between
     return str.substr(slash + 1, dot - (slash + 1));
 }
-
 
 /**
  * The method called to update the application data.
@@ -127,34 +128,49 @@ std::string getTexture(std::string str){
  *
  * @param timestep  The amount of time (in seconds) since the last frame
  */
-void FarmvilleApp::update(float timestep) {
-    Size  size  = getDisplaySize();
+void FarmvilleApp::update(float timestep)
+{
+    Size size = getDisplaySize();
     auto current = std::atomic_load_explicit(
         &DisplayObject::buffedFarmPointer,
         std::memory_order_acquire);
-        auto map = (*current);
-        for (const auto & [key, value] : map) {
-            if(_elements.count(key) > 0) {
-                _elements[key]->setPosition(value.x, value.y);
+    auto map = (*current);
+    for (const auto &[key, value] : map)
+    {
+        if (_elements.count(key) > 0)
+        {
+            _elements[key]->setPosition(value.x, value.y);
+            _elements[key]->setVisible(true);
 
-                if(getTexture(_elements[key]->getTexture()->getName()) != value.texture) {
-                    _elements[key]->setTexture(_assets->get<Texture>(value.texture));
-                }
-            
-            } else {
-                // create a new element
-                std::shared_ptr<scene2::PolygonNode> element = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(value.texture));
-                element->setPosition(value.x, value.y);
-                element->setPriority(value.layer);
-                element->setScale(value.width/element->getWidth(), value.height/element->getHeight()); 
-                element->setAnchor(Vec2::ANCHOR_CENTER);
-                _root->addChild(element);
-                _elements[key] = element;
+            if (getTexture(_elements[key]->getTexture()->getName()) != value.texture)
+            {
+                _elements[key]->setTexture(_assets->get<Texture>(value.texture));
             }
+        }
+        else
+        {
+            // create a new element
+            std::shared_ptr<scene2::PolygonNode> element = scene2::PolygonNode::allocWithTexture(_assets->get<Texture>(value.texture));
+            element->setTag(value.id+1);
+            element->setPosition(value.x, value.y);
+            element->setPriority(value.layer);
+            element->setScale(value.width / element->getWidth(), value.height / element->getHeight());
+            element->setAnchor(Vec2::ANCHOR_CENTER);
+            _root->addChild(element);
+            _elements[key] = element;
         }
     }
 
+    auto children = _root->getChildren();
+    for (int i = 0; i < children.size(); ++i) {
+        auto element = children[i];
+        auto id = element->getTag() - 1;
+        if (map.count(id) == 0){
+            element->setVisible(false);
+        }
+    }
 
+}
 
 /**
  * The method called to draw the application to the screen.
@@ -165,7 +181,8 @@ void FarmvilleApp::update(float timestep) {
  * When overriding this method, you do not need to call the parent method
  * at all. The default implmentation does nothing.
  */
-void FarmvilleApp::draw() {
+void FarmvilleApp::draw()
+{
     // This takes care of begin/end
     _scene->render();
 }
@@ -177,6 +194,6 @@ void FarmvilleApp::draw() {
  * you do in 3152.  However, they greatly simplify scene management, and
  * have become standard in most game engines.
  */
-void FarmvilleApp::buildScene() {
-
+void FarmvilleApp::buildScene()
+{
 }
