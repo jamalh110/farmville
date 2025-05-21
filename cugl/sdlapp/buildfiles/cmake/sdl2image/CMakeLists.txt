@@ -239,6 +239,11 @@ add_library(SDL2_image
     ${SDL2_IMAGE_SRC}/IMG_xv.c
     ${SDL2_IMAGE_SRC}/IMG_xxx.c
 )
+
+target_compile_options(SDL2_image PRIVATE
+    $<$<COMPILE_LANGUAGE:C>:-include;stdlib.h>
+)
+
 add_library(SDL2_image::${sdl2_image_export_name} ALIAS SDL2_image)
 target_include_directories(SDL2_image PUBLIC
     "$<BUILD_INTERFACE:${SDL2_IMAGE_INC}>"
