@@ -30,6 +30,7 @@
 #ifndef __FARMVILLE_APP_H__
 #define __FARMVILLE_APP_H__
 #include <cugl/cugl.h>
+#include <memory>
 #include "displayobject.hpp"
 
 /**
