@@ -9,6 +9,6 @@ RUN chmod -R 777 /config/Desktop/farmville
 RUN chown -R abc:abc /config/Desktop/farmville
 RUN cd /config/Desktop/farmville && sudo ./compile.sh
 
-RUN echo '[Desktop Entry]\nType=Application\nExec=bash -c "cd /config/Desktop/farmville/build/cmake/cmake/install/ && ./Farmville.exe"\nName=Farmville' > /config/Desktop/FarmvilleApp.desktop
+RUN echo '[Desktop Entry]\nType=Application\nExec=bash -c "cd /config/Desktop/farmville/build/cmake/cmake/install/ && ./Farmville.exe"\nName=FarmvilleApp' > /config/Desktop/FarmvilleApp.desktop
 RUN chmod +x /config/Desktop/FarmvilleApp.desktop
 RUN chown abc:abc /config/Desktop/FarmvilleApp.desktop
