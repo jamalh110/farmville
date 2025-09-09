@@ -61,7 +61,7 @@ Notice the various synchronization conditions!
 - PLEASE NOTE: Our example program (as given to you) uses usleep. This is NOT the way for threads to pause – it pauses the whole application. Your threads will be using the condition variable wait_until operation, which lets you wait for a timed delay. You should read about wait_until, and eliminate usleep completely from your new main process. 
 
 
-## Part 1: Due on X 
+## Part 1: Due on 10/20 
 For this part of the assignment, we want you to implement all the needed threads to do concurrent animation of all the moving parts, with proper layout on the screen (you have to decide where to put each thing), but without implementing any of the logic for threads interacting with each other. For example, you won’t worry about chickens walking right over each other, or trucks colliding. You won’t worry that the oven needs to coordinate with the stock or even that it needs two units of each ingredient to make a batch of cakes – just have it work randomly, like in our given code. Basically, any rule in the application that involves two threads talking to one another is in part 2, and if you are unsure, just ask on Ed.
 
 Have `redisplay` called from a separate thread that loops, redisplays, sleeps for a while, then repeats.
@@ -74,7 +74,7 @@ The simulation should run until ^C or until the window is closed
 
 For part 1 we will look at your logic for ensuring that your `redisplay()`, `updateFarm()`, and `erase()` do not enter the critical section concurrently, do not deadlock, and do not livelock. This is the only thing we will evaluate on part 1.
 
-## Part 2: Due on X
+## Part 2: Due on 11/03
 For this part, add to your part 1 all the missing logic for all the synchronization required to fully implement the application.
 
 What we will evaluate:
