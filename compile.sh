@@ -15,5 +15,6 @@ else
 fi
 
 cd build/cmake/cmake &&
+#cmake -DCUGL_AUDIO=OFF .. &&
 cmake .. &&
 cmake --build . -j 4
