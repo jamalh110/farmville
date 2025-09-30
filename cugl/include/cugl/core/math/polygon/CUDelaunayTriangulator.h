@@ -38,7 +38,7 @@
 #ifndef __CU_DELAUNAY_TRIANGULATOR_H__
 #define __CU_DELAUNAY_TRIANGULATOR_H__
 #include <cugl/core/math/CUVec2.h>
-
+#include <cugl/core/math/CUPoly2.h>
 #include <poly2tri/poly2tri.h>
 #include <unordered_map>
 #include <deque>
