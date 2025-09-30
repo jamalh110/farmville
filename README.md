@@ -36,7 +36,7 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 - After your first build, you can use `./compile.sh skip-cugl` to speed up compilation
 ###### Windows/Linux
 - If Windows, use WSL Ubuntu 24.04
-- Install the following packages: sudo apt update && sudo apt install -y libglew-dev libxext-dev freeglut3-dev uuid-dev python3-pip cmake
+- Install the following packages: `apt update && apt install -y libglew-dev libxext-dev freeglut3-dev uuid-dev python3-pip cmake`
 - Python dependencies: PyYAML, Pillow, shortuuid.
   - `pip install PyYAML Pillow shortuuid`
 - `./compile.sh` to compile
@@ -47,11 +47,11 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 - From the Farmville project repository, and inside the folder run `docker build -t farmville .`. You only need to do this build step once
 - Once that builds, run this command from within the farmville project repository to start the docker container: `docker run --rm -e PUID=1000 -e PGID=1000 -e TZ=America/New_York -p 3000:3000 --shm-size="1gb" -v "$(pwd)":/config/Desktop/farmville farmville`. You can stop the container and re-run it using this command without rebuilding the container
 - Once that starts the container, go to your browser and visit `http://localhost:3000`
-– You should see a virtual desktop with a folder on it called "farmville". This folder is connected to your local farmville repo folder. Changes in your local folder will show up in the docker container
-– Inside the virtual desktop, right click and select "Open Terminal Here". Then, cd into the farmville folder and use `./compile.sh` to compile and `./run.sh` to run
-– After your first build, you can edit the farmville source code on your local computer, and use `./compile.sh skip-cugl` in the virtual desktop to speed up compilation
+- You should see a virtual desktop with a folder on it called "farmville". This folder is connected to your local farmville repo folder. Changes in your local folder will show up in the docker container
+- Inside the virtual desktop, right click and select "Open Terminal Here". Then, cd into the farmville folder and use `./compile.sh` to compile and `./run.sh` to run
+- After your first build, you can edit the farmville source code on your local computer, and use `./compile.sh skip-cugl` in the virtual desktop to speed up compilation
 ### VM:
-- If neither native or Docker works for you, post on Ed and a TA will try to help you. If nothing works, the TA will help you set up Virtual Box which should be guaranteed to work
+- If neither native nor Docker works for you, post on Ed and a TA will try to help you. If nothing works, the TA will help you set up Virtual Box which should be guaranteed to work
 
 ## The scenario:
 - We have a set of barns that produce eggs, flour, butter and sugar.
@@ -135,11 +135,6 @@ Additional requirements for part 2:
 7. The trucks must have some potential for reaching some form of intersection at the same time, and must coordinate so that first one goes through, then the other, and it can't always be that truck B always waits until after truck A passes. The rule has to depend on who gets there in what order and when, not some kind of rigid thing that might leave truck B waiting ten minutes until truck A happens to pass, for example.
 8. A child who has his or her turn to buy cakes gets to wait until he or she has the proper number of cakes.
 9. Children can't walk over one-another.
-
-
-
-## Virtualbox steps:
-- todo: detail vbox run steps
 
 ## Extra credit:
 - todo: detail extra credit competition
