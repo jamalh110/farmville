@@ -27,12 +27,24 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 - Each object has an `updateFarm` and `erase` method. `updateFarm` updates (and if needed, inserts) its value in the shared farm state object, and `erase` removes the object from the shared farm state object. When these are called, it will be reflected on screen upon the following `redisplay()` call.
 
 ## How to run:
+### Natively (easiest option)
+###### MacOS:
 - Python dependencies: PyYAML, Pillow, shortuuid.
   - `pip install PyYAML Pillow shortuuid`
 - `./compile.sh` to compile
 - `./run.sh` to run
 - After your first build, you can use `./compile.sh skip-cugl` to speed up compilation
-- If this is not working on your machine, we have steps below detailing how to run this in a VirtualBox Ubuntu VM
+###### Windows/Linux
+- If Windows, use WSL Ubuntu 24.04
+- Install the following packages: sudo apt update && sudo apt install -y libglew-dev libxext-dev freeglut3-dev uuid-dev python3-pip cmake
+- Python dependencies: PyYAML, Pillow, shortuuid.
+  - `pip install PyYAML Pillow shortuuid`
+- `./compile.sh` to compile
+- `./run.sh` to run
+- After your first build, you can use `./compile.sh skip-cugl` to speed up compilation
+### Docker:
+### VM:
+
 
 ## The scenario:
 - We have a set of barns that produce eggs, flour, butter and sugar.

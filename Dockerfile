@@ -1,6 +1,6 @@
 FROM lscr.io/linuxserver/webtop:ubuntu-xfce
 USER root
-RUN sudo apt-get update && sudo apt-get install -y libglew-dev libxext-dev freeglut3-dev uuid-dev libpulse-dev pulseaudio python3-pip
+RUN sudo apt-get update && sudo apt-get install -y libglew-dev libxext-dev freeglut3-dev uuid-dev python3-pip libpulse-dev pulseaudio 
 RUN sudo pip install --break-system-packages PyYAML Pillow shortuuid
 COPY . /config/Desktop/farmville
 RUN rm -rf /config/Desktop/farmville/.git
