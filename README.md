@@ -43,8 +43,15 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 - `./run.sh` to run
 - After your first build, you can use `./compile.sh skip-cugl` to speed up compilation
 ### Docker:
+- Make sure you have Docker installed and make sure the engine is running
+- From the Farmville project repository, and inside the folder run `docker build -t farmville .`. You only need to do this build step once
+- Once that builds, run this command from within the farmville project repository to start the docker container: `docker run --rm -e PUID=1000 -e PGID=1000 -e TZ=America/New_York -p 3000:3000 --shm-size="1gb" -v "$(pwd)":/config/Desktop/farmville farmville`. You can stop the container and re-run it using this command without rebuilding the container
+- Once that starts the container, go to your browser and visit `http://localhost:3000`
+– You should see a virtual desktop with a folder on it called "farmville". This folder is connected to your local farmville repo folder. Changes in your local folder will show up in the docker container
+– Inside the virtual desktop, right click and select "Open Terminal Here". Then, cd into the farmville folder and use `./compile.sh` to compile and `./run.sh` to run
+– After your first build, you can edit the farmville source code on your local computer, and use `./compile.sh skip-cugl` in the virtual desktop to speed up compilation
 ### VM:
-
+- If neither native or Docker works for you, post on Ed and a TA will try to help you. If nothing works, the TA will help you set up Virtual Box which should be guaranteed to work
 
 ## The scenario:
 - We have a set of barns that produce eggs, flour, butter and sugar.

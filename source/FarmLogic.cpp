@@ -147,8 +147,8 @@ void FarmLogic::run() {
             }
         }
 
-        chicken.setPos(chicken.x + randomNumberX, chicken.y  + randomNumberY);
-        chicken2.setPos(chicken2.x + randomNumberX, chicken2.y + randomNumberY);
+        chicken.setPos(chicken.x + randomNumberX*3, chicken.y  + randomNumberY);
+        chicken2.setPos(chicken2.x + randomNumberX, chicken2.y + randomNumberY*3);
         chicken.updateFarm();
         chicken2.updateFarm();
         DisplayObject::redisplay(stats);
