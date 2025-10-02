@@ -29,15 +29,18 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 ## How to run:
 ### Natively (easiest option)
 ###### MacOS:
+- If you don't have cmake installed, install cmake. The easiest way to do so is `brew install cmake`
 - Python dependencies: PyYAML, Pillow, shortuuid.
+  - If you don't want to edit your system packages, you may create a virtual Python environment to install these packages
   - `pip install PyYAML Pillow shortuuid`
 - `./compile.sh` to compile
 - `./run.sh` to run
 - After your first build, you can use `./compile.sh skip-cugl` to speed up compilation
 ###### Windows/Linux
 - If Windows, use WSL Ubuntu 24.04
-- Install the following packages: `apt update && apt install -y libglew-dev libxext-dev freeglut3-dev uuid-dev python3-pip cmake`
+- Install the following packages: `sudo apt update && sudo apt install -y libglew-dev libxext-dev freeglut3-dev uuid-dev python3-pip cmake`
 - Python dependencies: PyYAML, Pillow, shortuuid.
+  - If you don't want to edit your system packages, you may create a virtual Python environment to install these packages
   - `pip install PyYAML Pillow shortuuid`
 - `./compile.sh` to compile
 - `./run.sh` to run
@@ -51,7 +54,7 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 - Inside the virtual desktop, right click and select "Open Terminal Here". Then, cd into the farmville folder and use `./compile.sh` to compile and `./run.sh` to run
 - After your first build, you can edit the farmville source code on your local computer, and use `./compile.sh skip-cugl` in the virtual desktop to speed up compilation
 ### VM:
-- If neither native nor Docker works for you, post on Ed and a TA will try to help you. If nothing works, the TA will help you set up Virtual Box which should be guaranteed to work
+- If neither native nor Docker works for you, come to office hours or post on Ed and a TA will try to help you. If nothing works, the TA will help you set up a VM which should be guaranteed to work
 
 ## The scenario:
 - We have a set of barns that produce eggs, flour, butter and sugar.
@@ -96,11 +99,17 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 
 
 ## Your job:
-- Our existing program has a displayable object class and creates some basic objects, which it displays in a pretty random way so that you can see them. Then it loops animating one or two things, again in a totally random way to demonstrate the capability. 
+- Our existing program has a displayable object class and creates some basic objects, which it displays in a pretty random way so that you can see them. Then it loops animating one or two things, again in a totally random way to demonstrate the capability.
 - Your task is create one thread per moving object, which would loop and show the object as it moves around. Use the monitor style of synchronization, and use monitor condition variables to wait for specific things.
 - Additionally, do the redisplay action in a separate thread that loops: it should redisplay, sleep for a while, then repeat. Aim for at least 10 frames per second (100ms sleep time).
-- PLEASE NOTE: Our example program (as given to you) uses usleep. This is NOT the way for threads to pause – it pauses the whole application. Your threads will be using the condition variable wait_until operation, which lets you wait for a timed delay. You should read about wait_until, and eliminate usleep completely from your new main process. 
+- Keep your bakery stats updated
+- **PLEASE NOTE**: Our example program (as given to you) uses sleep_for. This is NOT the recommended way for event-based threads to pause. For threads that need to take actions when certain events happen, they should use the condition variable wait_until operation.
 
+## How to submit (Both parts 1 and 2):
+- Submit a zip of your source folder to Gradescope
+- Also submit a 15-30 second video of your simulation running to Gradescope
+- (Part 2 only) A short document called report.pdf that explains your thread safety decisions. This does not need to be long, 0.5-1 pages is plenty
+- (Part 2 only) If you would like to be considered for extra credit (extra credit is for part 2 only), submit a file called extracredit.txt that explains what extra steps you took to make your farm look nice
 
 ## Part 1: Due on 10/20 
 For this part of the assignment, we want you to implement all the needed threads to do concurrent animation of all the moving parts, with proper layout on the screen (you have to decide where to put each thing), but without implementing any of the logic for threads interacting with each other. 
@@ -114,15 +123,19 @@ will be buggy if you do not implement this one form of mutual exclusion.
 
 The simulation should run until `^C` or until the window is closed.
 
-For part 1, we will look at your logic for ensuring that your `redisplay()`, `updateFarm()`, and `erase()` do not enter the critical section concurrently, do not deadlock, and do not livelock. This is the only thing we will evaluate on part 1.
+For part 1, we will look at your logic for ensuring that your `redisplay()`, `updateFarm()`, and `erase()` do not enter the critical section concurrently, do not deadlock, and do not livelock. This and having all the moving pieces are the only things we will evaluate on part 1
 
 ## Part 2: Due on 11/03
 For this part, add to your part 1 all the missing logic for all the synchronization required to fully implement the application.
 
 What we will evaluate:
-- For both parts, we will run your program and make sure that the animation seems to be correct and implementing our various rules (e.g. no objects on the same layer collide, there must be at least 2 of each item for the oven to bake a batch, etc). 
+- We will run your program and make sure that the animation seems to be correct and implementing our various rules (e.g. no objects on the same layer collide, there must be at least 2 of each item for the oven to bake a batch, etc). 
 - We will check that you aren’t losing produce (like eggs that vanish).
 - We will also check to see that your code has no deadlocks or livelocks caused by the extra synchronization required to implement part 2.
+- Ensure that you are making some use of condition variables
+- Don't do something like using a single mutex lock for your entire simulation. Logic that can run in parallel should be able to run in parallel
+- The exact details of how you enforce thread safety are up to you
+- A short writeup called report.pdf that explains the decisions you made regarding thread safety. 0.5-1 pages for this should suffice
 
 
 Additional requirements for part 2:
@@ -136,5 +149,13 @@ Additional requirements for part 2:
 8. A child who has his or her turn to buy cakes gets to wait until he or she has the proper number of cakes.
 9. Children can't walk over one-another.
 
-## Extra credit:
-- todo: detail extra credit competition
+## Extra credit (for Part 2 only):
+- This extra credit will be awarded for part 2 only. We will not evaluate extra credit for part 1
+- If you wish to be considered for extra credit, do not forget to submit extracredit.txt on Gradescope
+- This is an open-ended assignment, and we will be awarding extra credit to students who go beyond the basic requirements
+- Students who use customize their farm look in some non-trivial way will be guaranteed to receive at least a little bit of extra credit. A way to satisfy this could be to add a nice texture for the bakery and changing the textures for some of the assets. Something extremely simple like changing the background color will not satisfy this
+- Students who go further will get even more extra credit. Some examples would be:
+  - Adding animations to actions like milking the cow or moving the truck
+  - Ensuring that trucks and animals actually face the direction that they are moving in
+  - Having more moving parts or functionality than what was required 
+- The best looking simulations we come across will be shown in class

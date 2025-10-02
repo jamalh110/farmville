@@ -4,6 +4,7 @@
 #include <thread>
 #include <cstdlib>
 #include <ctime>
+#include <chrono>
 
 void FarmLogic::run() {
     BakeryStats stats;
@@ -153,7 +154,7 @@ void FarmLogic::run() {
         chicken2.updateFarm();
         DisplayObject::redisplay(stats);
         // sleep for 100 ms
-        usleep(100000);
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 }
 
