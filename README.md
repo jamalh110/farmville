@@ -133,7 +133,7 @@ will be buggy if you do not implement this one form of mutual exclusion.
 
 The simulation should run until `^C` or until the window is closed.
 
-For part 1, we will look at your logic for ensuring that your `redisplay()`, `updateFarm()`, and `erase()` do not enter the critical section concurrently, do not deadlock, and do not livelock. This and having all the moving pieces are the only things we will evaluate on part 1
+For part 1, we will look at your logic for ensuring that your `redisplay()`, `updateFarm()`, and `erase()` do not enter the critical section concurrently, do not deadlock, and do not livelock. Your locks on these functions should also be narrowly scoped. This means that you should not acquire the farm update/redisplay lock until you actually need to update or redisplay it, so logic for determining and setting positions for your entities should live outside the lock. This and having all the moving pieces are the only things we will evaluate on part 1
 
 This is an open-ended project, so the exact implementation details for how you do this are up to you!
 
@@ -144,8 +144,8 @@ What we will evaluate:
 - We will run your program and make sure that the animation seems to be correct and implementing our various rules (e.g. no objects on the same layer collide, there must be at least 2 of each item for the oven to bake a batch, etc). 
 - We will check that you aren’t losing produce (like eggs that vanish).
 - We will also check to see that your code has no deadlocks or livelocks caused by the extra synchronization required to implement part 2.
-- Don't do something like using a single mutex lock for your entire simulation. Logic that can run in parallel should be able to run in parallel.
-- We will ensure that you are making use of condition variables where appropriate 
+- Don't do something like using a single mutex lock for your entire simulation. Logic that can run in parallel should be able to run in parallel. For example, the thread logic that determines whether the bakery has enough ingredients to bake a cake should not be using the same lock as logic that ensures entities don't overlap on the screen
+- We will ensure that you are making use of condition variables and reader/writer patterns where appropriate 
 - The exact details of how you enforce thread safety are up to you
 - A short writeup called report.pdf that explains the decisions you made regarding thread safety. 0.5-1 pages for this should suffice
 
