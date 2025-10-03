@@ -2,6 +2,7 @@
 #include "FarmvilleApp.h"
 #include <cstdlib>
 #include <ctime>
+#include <atomic>
 #include "displayobject.hpp"
 #include "FarmLogic.h"
 

@@ -1,4 +1,5 @@
 #include "displayobject.hpp"
+#include <atomic>
 
 std::unordered_map<int, DisplayObject> DisplayObject::theFarm{};
 std::shared_ptr<std::unordered_map<int, DisplayObject>> DisplayObject::buffedFarmPointer{std::make_shared<decltype(theFarm)>()};

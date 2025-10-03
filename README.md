@@ -125,7 +125,7 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 For this part of the assignment, we want you to implement all the needed threads to do concurrent animation of all the moving parts, with proper layout on the screen (you have to decide where to put each thing), but without implementing any of the logic for threads interacting with each other. 
 - For example, you won’t worry about chickens walking right over each other, or trucks colliding. You won’t worry that the oven needs to coordinate with the stock or even that it needs two units of each ingredient to make a batch of cakes – just have it work randomly, like in our given code. Basically, any rule in the application that involves two threads talking to one another is in part 2, and if you are unsure, just ask on Ed.
 
-Have `redisplay` called from a separate thread that loops, redisplays, sleeps for a while, then repeats.
+Have `redisplay` called from a separate thread that loops, redisplays, sleeps for a while, then repeats. Note that the starter code does not have redisplay in a separate thread, so you will have to fix it
 Even so, there is one form of synchronization required! Our `updateFarm` and `erase` methods are not thread safe, and because
 the underlying display image shows every object, needs to be protected so that (a) two threads never call
 `updateFarm` on the identical object, and (b) if `redisplay()` is running, nobody can call `updateFarm`, and vice-versa. Part 1
@@ -135,6 +135,8 @@ The simulation should run until `^C` or until the window is closed.
 
 For part 1, we will look at your logic for ensuring that your `redisplay()`, `updateFarm()`, and `erase()` do not enter the critical section concurrently, do not deadlock, and do not livelock. This and having all the moving pieces are the only things we will evaluate on part 1
 
+This is an open-ended project, so the exact implementation details for how you do this are up to you!
+
 ## Part 2: Due on 11/03
 For this part, add to your part 1 all the missing logic for all the synchronization required to fully implement the application.
 
@@ -142,8 +144,8 @@ What we will evaluate:
 - We will run your program and make sure that the animation seems to be correct and implementing our various rules (e.g. no objects on the same layer collide, there must be at least 2 of each item for the oven to bake a batch, etc). 
 - We will check that you aren’t losing produce (like eggs that vanish).
 - We will also check to see that your code has no deadlocks or livelocks caused by the extra synchronization required to implement part 2.
-- Ensure that you are making some use of condition variables
-- Don't do something like using a single mutex lock for your entire simulation. Logic that can run in parallel should be able to run in parallel
+- Don't do something like using a single mutex lock for your entire simulation. Logic that can run in parallel should be able to run in parallel.
+- We will ensure that you are making use of condition variables where appropriate 
 - The exact details of how you enforce thread safety are up to you
 - A short writeup called report.pdf that explains the decisions you made regarding thread safety. 0.5-1 pages for this should suffice
 
