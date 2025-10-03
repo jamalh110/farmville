@@ -27,7 +27,16 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 - Each object has an `updateFarm` and `erase` method. `updateFarm` updates (and if needed, inserts) its value in the shared farm state object, and `erase` removes the object from the shared farm state object. When these are called, it will be reflected on screen upon the following `redisplay()` call.
 
 ## How to run:
-### Natively (easiest option)
+### ugclinux (easiest option for Windows/Linux)
+- If on Windows, use WSL Ubuntu 24.04
+- ssh into ugclinux using the -Y flag. For example, `ssh -Y netid@ugclinux.cs.cornell.edu`
+- Python dependencies: PyYAML, Pillow, shortuuid.
+  - If you don't want to edit your system packages, you may create a virtual Python environment to install these packages
+  - `pip install PyYAML Pillow shortuuid`
+- `./compile.sh` to compile
+- `./run.sh` to run
+- After your first build, you can use `./compile.sh skip-cugl` to speed up compilation
+### Natively (easiest option for Mac)
 ###### MacOS:
 - If you don't have cmake installed, install cmake. The easiest way to do so is `brew install cmake`
 - Python dependencies: PyYAML, Pillow, shortuuid.
