@@ -30,6 +30,7 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 ### ugclinux (easiest option for Windows/Linux)
 - If on Windows, use WSL Ubuntu 24.04
 - ssh into ugclinux using the -Y flag. For example, `ssh -Y netid@ugclinux.cs.cornell.edu`
+- Clone this repo in your ugclinux user
 - Python dependencies: PyYAML, Pillow, shortuuid.
   - If you don't want to edit your system packages, you may create a virtual Python environment to install these packages
   - `pip install PyYAML Pillow shortuuid`
@@ -117,7 +118,7 @@ We are providing a framework that utilizes the CUGL graphics package from CS 515
 ## How to submit (Both parts 1 and 2):
 - Submit a zip of your source folder to Gradescope
 - Also submit a 15-30 second video of your simulation running to Gradescope
-- (Part 2 only) A short document called report.pdf that explains your thread safety decisions. This does not need to be long, 0.5-1 pages is plenty
+- (Part 2 only) A short document called report.pdf that explains your thread safety decisions. This does not need to be long, 0.5 pages is plenty
 - (Part 2 only) If you would like to be considered for extra credit (extra credit is for part 2 only), submit a file called extracredit.txt that explains what extra steps you took to make your farm look nice
 
 ## Part 1: Due on 10/20 
